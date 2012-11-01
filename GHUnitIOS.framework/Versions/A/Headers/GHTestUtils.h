@@ -1,8 +1,9 @@
 //
-//  GHUnitIPhoneAppDelegate.h
+//  GHTestUtils.h
 //  GHUnitIOS
 //
-//  Created by Gabriel Handford on 6/28/11.
+//  Created by John Boiles on 10/22/12.
+//  Copyright 2012. All rights reserved.
 //
 //  Permission is hereby granted, free of charge, to any person
 //  obtaining a copy of this software and associated documentation
@@ -26,11 +27,25 @@
 //  OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#import "GHUnitIOSAppDelegate.h"
+#import <Foundation/Foundation.h>
 
-// For backwards compatibility (see GHUnitIOSAppDelegate)
-@interface GHUnitIPhoneAppDelegate : GHUnitIOSAppDelegate {
-    
-}
+#define GHRunWhile(__CONDITION__) GHRunUntilTimeoutWhileBlock(10.0, ^BOOL{ return (__CONDITION__); })
 
-@end
+/*!
+ Run the main run loop for a period of time. This is useful to give views time to
+ render any asynchronously rendered views. However when possible, GHRunUntilTimeoutWhileBlock
+ should be used instead since it will provide more determinate output.
+
+ @param interval Interval for the main loop to run
+ */
+void GHRunForInterval(CFTimeInterval interval);
+
+/*!
+ Keep running the main runloop until whileBlock returns NO or timeout is reached.
+ This is useful for waiting until certain parts of views render. This method should be
+ used instead of putting GHRunForInterval in a while loop.
+
+ @param timeout Maximum time to run the main loop before giving up
+ @param whileBlock Block that returns YES if the main runloop should keep running
+ */
+void GHRunUntilTimeoutWhileBlock(CFTimeInterval timeout, BOOL(^whileBlock)());
